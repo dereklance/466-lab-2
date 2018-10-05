@@ -5,16 +5,16 @@ def parse(filename):
 	with open(filename, 'r') as file:
 		lines = file.read().strip().split(os.linesep)
 		category = lines[2]
-		variables = lines[0].split(',')
+		variables = lines[0].split(',')[1:]
 		
 		for line in lines[3:]:
 			row = line.split(',')
 			dict = {}
 			for index, variableName in enumerate(variables):
 				if variableName == category:
-					dict['Category'] = row[index]
+					dict['Category'] = row[index + 1]
 				else:
-					dict[variableName] = row[index]
+					dict[variableName] = row[index + 1]
 			dataPoints.append(dict)
 	return dataPoints
 
