@@ -44,20 +44,35 @@ def selectSplittingAttribute(data, attributes, threshold):
 
 # C4.5 Decision Tree Algorithm
 def build(data, attributes, tree, threshold):
-	if isUniform([dict['Category'] for dict in data]):
-		print('uniform')
-		tree = Node(data[0]['Category'], None)
+	if isUniform(dict['Category'] for dict in data):
+		tree.setName(data[0]['Category'])
 	elif len(attributes) == 0:
-		tree = Node(mostFrequentCategory(data), None)
+		tree.setName(mostFrequentCategory(data))
 	else:
-		print('placehold')
-
+		bestAttribute = selectSplittingAttribute(data, attributes, threshold)
+		if not bestAttribute:
+			tree.setName(mostFrequentCategory(data))
+		else:
+			tree.setName(bestAttribute)
+			attributeDict = groupByAttribute(data, bestAttribute)
+			for attributeName in attributeDict.keys():
+				newData = attributeDict[attributeName]
+				if len(newData) > 0:
+					newAttributes = list(attributes)
+					newAttributes.remove(bestAttribute)
+					childNode = Node(None, attributeName)
+					tree.addChild(childNode)
+					build(newData, newAttributes, childNode, threshold)
 
 def main():
 	data = csvParser.parse(sys.argv[1])
-	attributes = data[0].keys()
-	x = selectSplittingAttribute(data, attributes, 0)
-	print(x)
+	attributes = list(data[0].keys())
+	root = Node('Root', None)
+	build(data, attributes, root, 0.01)
+	print(root.name)
+	for child in root.children:
+		print(child.name)
+
 
 if __name__ == '__main__':
 	main()

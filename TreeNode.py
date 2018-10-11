@@ -7,6 +7,9 @@ class Node:
 	def addChild(self, child):
 		self.children.append(child)
 
+	def setName(self, name):
+		self.name = name
+
 def main():
 	root = Node('Ideology', 'Liberal')
 	root.addChild(Node('Obama', None))

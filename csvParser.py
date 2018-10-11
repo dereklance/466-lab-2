@@ -3,7 +3,7 @@ import json, sys, os
 def parse(filename):
 	dataPoints = []
 	with open(filename, 'r') as file:
-		lines = file.read().strip().split(os.linesep)
+		lines = file.read().strip().split('\n')
 		category = lines[2]
 		variables = lines[0].split(',')[1:]
 		
