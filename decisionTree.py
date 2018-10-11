@@ -32,15 +32,26 @@ def printTree(root):
 	for child in root.children:
 		printTree(child)
 
+def getEnd(className):
+	if className == "Obama":
+		return 1
+	elif className == "McCain":
+		return 2
+	else:
+		return -1
 
 # Decision nodes not done, haven't checked correctness of nesting on output
 def outputXML(root):
-	#tree = etree.Element("Tree", name="Decision Tree")
+	num = 1;
 	rootNode = etree.Element("node", var="{}".format(root.name))
 	for child in root.children:
-		edge = etree.Element("edge", var="{}".format(child.label))
+		edge = etree.Element("edge", var="{}".format(child.label), num ="{}".format(num))
+		num+=1
 		rootNode.append(edge)
-		childNode = outputXML(child)
+		if child.children:
+			childNode = outputXML(child)
+		else:
+			childNode = etree.Element("decision", choice="{}".format(child.name), end="{}".format(getEnd(child.name)))
 		edge.append(childNode)
 
 	return rootNode
